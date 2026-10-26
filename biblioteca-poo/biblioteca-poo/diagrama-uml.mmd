@@ -1,0 +1,50 @@
+classDiagram
+        class Material {
+<<abstract>>
+#codigo
+#titulo
+#autor
+#anoPublicacao
+#quantidadeExemplares
+#quantidadeDisponivel
++consultarDisponibilidade() bool
++emprestarExemplar() void
++devolverExemplar() void
++consultarQuantidadeDisponivel() int
++calcularPrazoMaximoEmprestimo()* int
+}
+class Livro { -isbn -numeroPaginas -editora -genero +calcularPrazoMaximoEmprestimo() int }
+class Revista { -edicao -volume -mesPublicacao +calcularPrazoMaximoEmprestimo() int }
+class EBook { -formatoArquivo -tamanhoArquivo -linkAcesso +calcularPrazoMaximoEmprestimo() int }
+class Usuario {
+<<abstract>>
+#matricula
+#nome
+#email
+#telefone
+#status
+#quantidadeMaximaEmprestimos
++consultarDados() array
++podeRealizarEmprestimo() bool
++diasAdicionaisPrazo()* int
+}
+class Aluno { +diasAdicionaisPrazo() int }
+class Professor { +diasAdicionaisPrazo() int }
+class Emprestimo { -codigo -usuario -material -dataEmprestimo -dataPrevistaDevolucao -dataRealDevolucao -status +registrarDevolucao() void }
+class Historico { -registros +registrar() void +listar() array }
+class MultaInterface { <<interface>> +calcularMulta(diasAtraso) float }
+class MultaPadrao { +calcularMulta(diasAtraso) float }
+class MultaProfessor { +calcularMulta(diasAtraso) float }
+class EmprestimoService { -historico -emprestimos +criarEmprestimo() Emprestimo +registrarDevolucao() array +calcularAtraso() int +calcularMulta() float }
+Material <|-- Livro
+Material <|-- Revista
+Material <|-- EBook
+Usuario <|-- Aluno
+Usuario <|-- Professor
+MultaInterface <|.. MultaPadrao
+MultaInterface <|.. MultaProfessor
+Emprestimo --> Usuario
+Emprestimo --> Material
+EmprestimoService *-- Historico
+EmprestimoService --> Emprestimo
+EmprestimoService ..> MultaInterface
